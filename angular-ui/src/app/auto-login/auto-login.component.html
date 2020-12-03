@@ -1,3 +1,6 @@
 <div class="container">
-    <button (click)="autoLogin()">Auto-Login Super-User</button>
+  <button (click)="autoLogin('user')">Auto-Login User</button>
+  <button (click)="autoLogin('admin')">Auto-Login Admin</button>
+  <button (click)="autoLogin('mod')">Auto-Login Moderator</button>
+  <button (click)="autoLogin('super')">Auto-Login Super-User</button>
 </div>

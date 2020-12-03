@@ -2,4 +2,24 @@
     <header class="jumbotron">
       <p>{{ content }}</p>
     </header>
+</div>
+<div class="links">
+  <h2>Home Fragment Options</h2>
+  <ul>
+    <li *ngFor="let link of modes">
+      <a [routerLink]='"."' [fragment]="link" (click)="doStuff(link)">{{link}}</a>
+    </li>
+  </ul>
+</div>
+<section>
+  <div class="section" *ngFor="let link of modes" [attr.id]='link' >
+    <h1>{{link}}</h1>
+    <div class="content">
+      Here is the {{link}} section.
+    </div>
+    <div *ngIf="clicked === link">
+      You just clicked {{link}}.<br/>
+      Here is the API Response: {{apiResponse}}
+    </div>
   </div>
+</section>

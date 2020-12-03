@@ -5,14 +5,17 @@
       <li class="nav-item">
         <a href="/home" class="nav-link" routerLink="home">Home </a>
       </li>
-      <li class="nav-item" *ngIf="showAdminBoard">
-        <a href="/admin" class="nav-link" routerLink="admin">Admin Board</a>
-      </li>
-      <li class="nav-item" *ngIf="showModeratorBoard">
-        <a href="/mod" class="nav-link" routerLink="mod">Moderator Board</a>
-      </li>
+      <!-- removed from li element: *ngIf="showAdminBoard" -->
       <li class="nav-item">
-        <a href="/user" class="nav-link" *ngIf="isLoggedIn" routerLink="user"
+        <a href="/admin" class="nav-link" [ngStyle]="{'color': showAdminBoard? 'chartreuse' : 'pink'}" routerLink="admin">Admin Board</a>
+      </li>
+      <!-- removed from li element: *ngIf="showModeratorBoard" -->
+      <li class="nav-item">
+        <a href="/mod" class="nav-link" [ngStyle]="{'color': showModeratorBoard? 'chartreuse' : 'pink'}" routerLink="mod">Moderator Board</a>
+      </li>
+      <!-- removed from a element: *ngIf="isLoggedIn" -->
+      <li class="nav-item">
+        <a href="/user" class="nav-link" [ngStyle]="{'color': isLoggedIn? 'chartreuse' : 'pink'}" routerLink="user"
           >User</a
         >
       </li>
@@ -45,5 +48,26 @@
       <app-auto-login></app-auto-login>
     </div>
     <router-outlet></router-outlet>
+    
+    <!-- Anchor and Fragment Tests Begin -->
+    <!-- Moved to home.component.html
+    <div class="links">
+      <h2>Fragment Options</h2>
+      <ul>
+        <li *ngFor="let link of modes">
+          <a [routerLink]='"."' [fragment]="link">{{link}}</a>
+        </li>
+      </ul>
+    </div>
+    <section>
+      <div class="section" *ngFor="let link of modes" [attr.id]='link' >
+        <h1>{{link}}</h1>
+        <div class="content">
+          Here is the {{link}} section.
+        </div>
+      </div>
+    </section>
+    -->
+    <!-- Anchor and Fragment Tests End -->
   </div>
 </div>

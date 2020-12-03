@@ -23,6 +23,7 @@ export class AppComponent implements OnInit {
   showAdminBoard = false;
   showModeratorBoard = false;
   username: string = "";
+  //modes: Array<String> = ['public', 'admin', 'mod']
 
   constructor(private tokenStorageService: TokenStorageService) {}
 

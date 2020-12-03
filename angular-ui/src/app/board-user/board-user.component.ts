@@ -18,7 +18,7 @@ export class BoardUserComponent implements OnInit {
         this.content = data;
       },
       err => {
-        this.content = JSON.parse(err.error).message;
+        this.content = 'Error HTTP Status Code: ' + JSON.parse(err.error).status + ' | ' + 'Error Message: ' + JSON.parse(err.error).error;
       }
     );
   }

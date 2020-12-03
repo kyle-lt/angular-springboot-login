@@ -19,8 +19,8 @@ export class AutoLoginComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  autoLogin(): void {
-    this.authService.autoLogin().subscribe(
+  autoLogin(user: string): void {
+    this.authService.autoLogin(user).subscribe(
       data => {
         this.tokenStorage.saveToken(data.accessToken);
         this.tokenStorage.saveUser(data);
