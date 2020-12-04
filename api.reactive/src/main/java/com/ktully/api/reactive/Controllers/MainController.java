@@ -1,15 +1,15 @@
 package com.ktully.api.reactive.Controllers;
 
+//import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /*
  * This API Controller is hidden behind Spring Cloud Gateway, which
- * does authentication and authorization for the below end points
- * using antMatchers in the com.ktully.auth.security.WebSecurityConfig
- * class.
+ * handles Cross Origin header.
  */
 
+//@CrossOrigin
 @RestController
 public class MainController {
 

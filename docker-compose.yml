@@ -1,9 +1,100 @@
 version: '3.6'
 
+# IMPORTANT!! Run $ docker-compose run start-db to start and wait for db container
+# Then, and only then, run docker-compose up -d
+# To login to PostreSQL psql CLI, run: docker exec -itu postgres db psql
+# To change to testdb database, run: \c testdb;
+# To quit, run: \q
+
 #networks:
   #internal-net:
     #name: workbench_subnet
 services:
+  api-reactive:
+    build: ./api.reactive
+    image: kjtully/angular-springboot-login-api-reactive:20.10
+    container_name: api-reactive
+    labels:
+      desciption: "Reactive API for Angular Springboot Login"
+    environment:
+      APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY: "$APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY"
+      APPDYNAMICS_AGENT_ACCOUNT_NAME: "$APPDYNAMICS_AGENT_ACCOUNT_NAME"
+      APPDYNAMICS_CONTROLLER_HOST_NAME: "$APPDYNAMICS_CONTROLLER_HOST_NAME"
+      APPDYNAMICS_CONTROLLER_PORT: "$APPDYNAMICS_CONTROLLER_PORT"
+      APPDYNAMICS_CONTROLLER_SSL_ENABLED: "$APPDYNAMICS_CONTROLLER_SSL_ENABLED"
+      APPDYNAMICS_AGENT_APPLICATION_NAME: "$APPDYNAMICS_AGENT_APPLICATION_NAME"
+      APPDYNAMICS_AGENT_TIER_NAME: "API-Reactive"
+      APPDYNAMICS_JAVA_AGENT_REUSE_NODE_NAME: "true"
+      APPDYNAMICS_JAVA_AGENT_REUSE_NODE_NAME_PREFIX: "reactive"
+    ports:
+      - "8081:8081"
+  auth:
+    build: ./auth
+    image: kjtully/angular-springboot-login-auth:20.10
+    container_name: auth
+    labels:
+      desciption: "Auth Reactive RestController for Angular Springboot Login"
+    environment:
+      APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY: "$APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY"
+      APPDYNAMICS_AGENT_ACCOUNT_NAME: "$APPDYNAMICS_AGENT_ACCOUNT_NAME"
+      APPDYNAMICS_CONTROLLER_HOST_NAME: "$APPDYNAMICS_CONTROLLER_HOST_NAME"
+      APPDYNAMICS_CONTROLLER_PORT: "$APPDYNAMICS_CONTROLLER_PORT"
+      APPDYNAMICS_CONTROLLER_SSL_ENABLED: "$APPDYNAMICS_CONTROLLER_SSL_ENABLED"
+      APPDYNAMICS_AGENT_APPLICATION_NAME: "$APPDYNAMICS_AGENT_APPLICATION_NAME"
+      APPDYNAMICS_AGENT_TIER_NAME: "Auth"
+      APPDYNAMICS_JAVA_AGENT_REUSE_NODE_NAME: "true"
+      APPDYNAMICS_JAVA_AGENT_REUSE_NODE_NAME_PREFIX: "auth"
+    ports:
+      - "8080:8080"
+  eureka-server:
+    build: ./eureka-server
+    image: kjtully/angular-springboot-login-eureka-server:20.10
+    container_name: eureka-server
+    labels:
+      desciption: "Eureka Discover Server for Angular Springboot Login"
+    environment:
+      APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY: "$APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY"
+      APPDYNAMICS_AGENT_ACCOUNT_NAME: "$APPDYNAMICS_AGENT_ACCOUNT_NAME"
+      APPDYNAMICS_CONTROLLER_HOST_NAME: "$APPDYNAMICS_CONTROLLER_HOST_NAME"
+      APPDYNAMICS_CONTROLLER_PORT: "$APPDYNAMICS_CONTROLLER_PORT"
+      APPDYNAMICS_CONTROLLER_SSL_ENABLED: "$APPDYNAMICS_CONTROLLER_SSL_ENABLED"
+      APPDYNAMICS_AGENT_APPLICATION_NAME: "$APPDYNAMICS_AGENT_APPLICATION_NAME"
+      APPDYNAMICS_AGENT_TIER_NAME: "Eureka-Server"
+      APPDYNAMICS_JAVA_AGENT_REUSE_NODE_NAME: "true"
+      APPDYNAMICS_JAVA_AGENT_REUSE_NODE_NAME_PREFIX: "eureka"
+    ports:
+      - "8761:8761"
+  gateway:
+    build: ./gateway
+    image: kjtully/angular-springboot-login-gateway:20.10
+    container_name: gateway
+    labels:
+      desciption: "Spring Cloud Gateway for Angular Springboot Login"
+    environment:
+      APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY: "$APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY"
+      APPDYNAMICS_AGENT_ACCOUNT_NAME: "$APPDYNAMICS_AGENT_ACCOUNT_NAME"
+      APPDYNAMICS_CONTROLLER_HOST_NAME: "$APPDYNAMICS_CONTROLLER_HOST_NAME"
+      APPDYNAMICS_CONTROLLER_PORT: "$APPDYNAMICS_CONTROLLER_PORT"
+      APPDYNAMICS_CONTROLLER_SSL_ENABLED: "$APPDYNAMICS_CONTROLLER_SSL_ENABLED"
+      APPDYNAMICS_AGENT_APPLICATION_NAME: "$APPDYNAMICS_AGENT_APPLICATION_NAME"
+      APPDYNAMICS_AGENT_TIER_NAME: "Spring-Cloud-Gateway"
+      APPDYNAMICS_JAVA_AGENT_REUSE_NODE_NAME: "true"
+      APPDYNAMICS_JAVA_AGENT_REUSE_NODE_NAME_PREFIX: "gateway"
+    ports:
+      - "8082:8082"
+  start-db:
+    image: ubuntu:14.04
+    depends_on:
+      - db
+    command: >
+      /bin/bash -c "
+        while ! nc -z db 5432;
+        do
+          echo Waiting for PostgreSQL to start;
+          sleep 1;
+        done;
+        echo PostgreSQL started and available on port 5672!;
+      "
   db:
     image: postgres:10.5
     container_name: db
@@ -13,7 +104,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: testdb
     ports:
-      - "5432:5432"
+      - "5432:5432"      
         #proxy:
         #image: nginx:latest
         #container_name: proxy

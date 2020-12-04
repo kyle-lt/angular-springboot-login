@@ -8,7 +8,6 @@ import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
-//import org.springframework.http.codec.ServerCodecConfigurer;
 
 @EnableEurekaClient
 @EnableConfigurationProperties(UriConfiguration.class)
@@ -19,42 +18,36 @@ public class GatewayApplication {
 		SpringApplication.run(GatewayApplication.class, args);
 	}
 	
-	/*
-	@Bean
-	public ServerCodecConfigurer serverCodecConfigurer() {
-	   return ServerCodecConfigurer.create();
-	}*/
-	
 	@Bean
 	public RouteLocator myRoutes(RouteLocatorBuilder builder, UriConfiguration uriConfiguration) {
-		String httpbinUri = uriConfiguration.getHttpbin();
 		String apiReactiveUri = uriConfiguration.getApiReactive();
 		String authUri = uriConfiguration.getAuth();
 		return builder.routes()
-				// httpbin
-				.route(p -> p.path("/get").filters(f -> f.addRequestHeader("Hello", "World")).uri(httpbinUri))
-				.route(p -> p.path("/headers").filters(f -> f.addRequestHeader("Hello", "World")).uri(httpbinUri))
-				.route(p -> p.path("/ip").filters(f -> f.addRequestHeader("Hello", "World")).uri(httpbinUri))
 				// apiReactive
 				.route(p -> p.path("/api/reactive/**").uri(apiReactiveUri))
-				.route(p -> p.path("/api/auth/**").uri(authUri))
+				// auth
+				//.route(p -> p.path("/api/auth/**").uri(authUri))
+				.route(p -> p.path("/api/auth/**").filters(f -> f.dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_LAST")).uri(authUri))
+				.route(p -> p.path("/api/test/**").filters(f -> f.dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_LAST")).uri(authUri))
 				// apiWeb // TODO
 				.build();
+		
+		/* Interesting reference for route configs:
+		 * 		//.route(p -> p.path("/api/auth/**").and().method("OPTION").filters(f -> f.setStatus("200").removeRequestHeader("Origin").addResponseHeader("Access-Control-Allow-Origin", "*").addResponseHeader("Access-Control-Allow-Headers", "content-type").dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_UNIQUE").dedupeResponseHeader("Access-Control-Allow-Headers", "RETAIN_UNIQUE")).uri(authUri))
+				//.route(p -> p.path("/api/auth/**").and().method("OPTION").filters(f -> f.setStatus("200").removeRequestHeader("Origin").addResponseHeader("Access-Control-Allow-Origin", "*").addResponseHeader("Access-Control-Allow-Headers", "content-type")).uri(authUri))
+				//.route(p -> p.path("/api/test/**").and().method("OPTION").filters(f -> f.setStatus("200").removeRequestHeader("Origin").addResponseHeader("Access-Control-Allow-Origin", "*").addResponseHeader("Access-Control-Allow-Headers", "content-type").dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_UNIQUE").dedupeResponseHeader("Access-Control-Allow-Headers", "RETAIN_UNIQUE")).uri(authUri))
+				//.route(p -> p.path("/api/test/**").and().method("OPTION").filters(f -> f.setStatus("200").removeRequestHeader("Origin").addResponseHeader("Access-Control-Allow-Origin", "*").addResponseHeader("Access-Control-Allow-Headers", "content-type")).uri(authUri))
+		 */
 	}
 }
 
 @ConfigurationProperties
 class UriConfiguration {
 
-	private String httpbin = "http://httpbin.org:80";
 	private String apiReactive = "lb://api-reactive";
 	private String auth = "lb://auth";
 
-	// GETTERS
-	public String getHttpbin() {
-		return httpbin;
-	}
-	
+	// GETTERS	
 	public String getApiReactive() {
 		return apiReactive;
 	}
@@ -64,10 +57,6 @@ class UriConfiguration {
 	}
 
 	// SETTERS
-	public void setHttpbin(String httpbin) {
-		this.httpbin = httpbin;
-	}
-	
 	public void setApiReactive(String apiReactive) {
 		this.apiReactive = apiReactive;
 	}

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-const API_URL = 'http://host.docker.internal:8081/api/reactive/';
+const API_URL = 'http://host.docker.internal:8082/api/reactive/';
 
 @Injectable({
   providedIn: 'root'

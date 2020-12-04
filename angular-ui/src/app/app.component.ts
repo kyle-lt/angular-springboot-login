@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TokenStorageService } from './_services/token-storage.service';
+import { UserService } from './_services/user.service';
+import { AuthService } from './_services/auth.service';
 
 // OpenTelemetry - Instantiate Tracer
 /*
@@ -25,7 +27,7 @@ export class AppComponent implements OnInit {
   username: string = "";
   //modes: Array<String> = ['public', 'admin', 'mod']
 
-  constructor(private tokenStorageService: TokenStorageService) {}
+  constructor(private tokenStorageService: TokenStorageService, private userService: UserService, private authService: AuthService) {}
 
   ngOnInit(): void {
     // OpenTelemetry Intialization - not working!
@@ -61,5 +63,27 @@ export class AppComponent implements OnInit {
   logout(): void {
     this.tokenStorageService.signOut();
     window.location.reload();
+  }
+
+  getTestPublicContent(): void {
+    this.userService.getPublicContent().subscribe(
+      data => {
+        console.log(data);
+      },
+      err => {
+        console.log('Error HTTP Status Code: ' + JSON.parse(err.error).status + ' | ' + 'Error Message: ' + JSON.parse(err.error).error);
+      }
+    );
+  }
+
+  getAuthPublicContent(): void {
+    this.authService.getPublicContent().subscribe(
+      data => {
+        console.log(data);
+      },
+      err => {
+        console.log('Error HTTP Status Code: ' + JSON.parse(err.error).status + ' | ' + 'Error Message: ' + JSON.parse(err.error).error);
+      }
+    );
   }
 }

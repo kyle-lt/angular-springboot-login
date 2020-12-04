@@ -1,5 +1,7 @@
 package com.ktully.auth.security;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +15,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.reactive.config.CorsRegistry;
+import org.springframework.web.reactive.config.WebFluxConfigurer;
 
 import com.ktully.auth.security.jwt.AuthEntryPointJwt;
 import com.ktully.auth.security.jwt.AuthTokenFilter;
@@ -35,6 +43,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public AuthTokenFilter authenticationJwtTokenFilter() {
 		return new AuthTokenFilter();
 	}
+	
+	// Enable Cross-Origin calls by adding Response Header "Access-Control-Allow-Origin: *" to all responses
+	@Bean
+	public WebFluxConfigurer corsConfigurer() {
+		return new WebFluxConfigurer() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/**").allowedOrigins("*");
+			}
+		};
+	}
 
 	@Override
 	public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
@@ -51,6 +70,39 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+	
+	/*  Replaced this with the below CorsFilter - same logic, though
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+    */
+    
+    @Bean
+    CorsFilter corsFilter() {
+    	final CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","HEAD","PATCH","OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("Accept",
+        		"Accept-Encoding",
+        		"Accept-Language",
+        		"Connection",
+        		"Content-Length",
+        		"Content-Type",
+        		"Host",
+        		"Origin",
+        		"Referer",
+        		"User-Agent"));
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+    	CorsFilter myCorsFilter = new CorsFilter(source);
+    	return myCorsFilter;
+    }
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {

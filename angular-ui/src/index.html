@@ -12,6 +12,22 @@
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
       crossorigin="anonymous"
     />
+    <script charset='UTF-8'>
+      window['adrum-start-time'] = new Date().getTime();
+      (function(config){
+          config.appKey = 'AD-AAB-ABA-EVK';
+          config.adrumExtUrlHttp = 'http://cdn.appdynamics.com';
+          config.adrumExtUrlHttps = 'https://cdn.appdynamics.com';
+          config.beaconUrlHttp = 'http://col.eum-appdynamics.com';
+          config.beaconUrlHttps = 'https://col.eum-appdynamics.com';
+          config.xd = {enable : false};
+        config.isZonePromise = true;
+            config.spa = {
+                "spa2": true
+            };
+      })(window['adrum-config'] || (window['adrum-config'] = {}));
+      </script>
+      <script src='//cdn.appdynamics.com/adrum/adrum-latest.js'></script>
   </head>
   <body>
     <app-root></app-root>

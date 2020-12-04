@@ -1,0 +1,40 @@
+# Set Application Name
+spring:
+  application:
+    name: "gateway"
+  # Enable CORS to all origins - this didn't work, I had to supply a custom filter (CorsConfiguration)
+  #cloud:
+    #gateway:
+      #globalcors:
+        #corsConfigurations:
+          #'[/**]':
+            #allowedOrigins: "*"
+            #allowedMethods:
+            #- GET
+            #- POST
+            #- PUT
+            #- DELETE
+            #- OPTIONS
+
+# Use Port 8082
+server:
+  port: "8082"
+
+# Eureka Properties
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: "http://host.docker.internal:8761/eureka"
+      
+# Actuator Properties
+management:
+  endpoints:
+    routes:
+      enabled: true
+    web:
+      exposure:
+        include: "*"
+
+
+
+  

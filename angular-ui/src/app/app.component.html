@@ -15,9 +15,13 @@
       </li>
       <!-- removed from a element: *ngIf="isLoggedIn" -->
       <li class="nav-item">
-        <a href="/user" class="nav-link" [ngStyle]="{'color': isLoggedIn? 'chartreuse' : 'pink'}" routerLink="user"
-          >User</a
-        >
+        <a href="/user" class="nav-link" [ngStyle]="{'color': isLoggedIn? 'chartreuse' : 'pink'}" routerLink="user">User</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" (click)="getTestPublicContent()">/api/test/all</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" (click)="getAuthPublicContent()">/api/auth/all</a>
       </li>
     </ul>
 

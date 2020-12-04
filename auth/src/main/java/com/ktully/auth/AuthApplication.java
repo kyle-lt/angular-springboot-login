@@ -2,19 +2,14 @@ package com.ktully.auth;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-//import org.springframework.cloud.gateway.route.RouteLocator;
-//import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
-import org.springframework.context.annotation.Bean;
-import org.springframework.http.codec.ServerCodecConfigurer;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.config.CorsRegistry;
+import org.springframework.web.reactive.config.WebFluxConfigurer;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
-//import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
+import org.springframework.context.annotation.Bean;
 
 @EnableEurekaClient
 @SpringBootApplication
-@EnableConfigurationProperties(UriConfiguration.class)
 @RestController
 public class AuthApplication {
 
@@ -22,50 +17,18 @@ public class AuthApplication {
 		SpringApplication.run(AuthApplication.class, args);
 	}
 	
+	// Enable Cross-Origin calls by adding Response Header "Access-Control-Allow-Origin: *" to all responses
+	// This didn't seem to work, so I supplied the CORS support in WebSecurityConfig @Bean CorsFilter
+	/*
 	@Bean
-	public ServerCodecConfigurer serverCodecConfigurer() {
-	   return ServerCodecConfigurer.create();
-	}
-	
-	/* Disabling for now, using Proxy util object in Controllers
-	@Bean
-	public RouteLocator myRoutes(RouteLocatorBuilder builder, UriConfiguration uriConfiguration) {
-		String httpbinUri = uriConfiguration.getHttpbin();
-		String apiReactiveUri = uriConfiguration.getApiReactive();
-		return builder.routes()
-				// httpbin
-				.route(p -> p.path("/get").filters(f -> f.addRequestHeader("Hello", "World")).uri(httpbinUri))
-				.route(p -> p.path("/headers").filters(f -> f.addRequestHeader("Hello", "World")).uri(httpbinUri))
-				.route(p -> p.path("/ip").filters(f -> f.addRequestHeader("Hello", "World")).uri(httpbinUri))
-				// apiReactive
-				.route(p -> p.path("/api/reactive/public").uri(apiReactiveUri))
-				// apiWeb // TODO
-				.build();
+	public WebFluxConfigurer corsConfigurer() {
+		return new WebFluxConfigurer() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/**").allowedOrigins("*");
+			}
+		};
 	}
 	*/
-}
-
-@ConfigurationProperties
-class UriConfiguration {
-
-	private String httpbin = "http://httpbin.org:80";
-	private String apiReactive = "lb://api-reactive";
-
-	// GETTERS
-	public String getHttpbin() {
-		return httpbin;
-	}
 	
-	public String getApiReactive() {
-		return apiReactive;
-	}
-
-	// SETTERS
-	public void setHttpbin(String httpbin) {
-		this.httpbin = httpbin;
-	}
-	
-	public void setApiReactive(String apiReactive) {
-		this.apiReactive = apiReactive;
-	}
 }
