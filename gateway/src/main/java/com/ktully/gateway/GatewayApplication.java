@@ -24,7 +24,7 @@ public class GatewayApplication {
 		String authUri = uriConfiguration.getAuth();
 		return builder.routes()
 				// apiReactive
-				.route(p -> p.path("/api/reactive/**").uri(apiReactiveUri))
+				.route(p -> p.path("/api/reactive/**").filters(f -> f.dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_LAST")).uri(apiReactiveUri))
 				// auth
 				//.route(p -> p.path("/api/auth/**").uri(authUri))
 				.route(p -> p.path("/api/auth/**").filters(f -> f.dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_LAST")).uri(authUri))

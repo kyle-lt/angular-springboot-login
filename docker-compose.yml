@@ -10,6 +10,16 @@ version: '3.6'
   #internal-net:
     #name: workbench_subnet
 services:
+  angular-ui:
+    build:
+      context: ./angular-ui/dist
+      dockerfile: ../Dockerfile
+    image: kjtully/angular-ui:20.10
+    container_name: angular-ui
+    labels:
+      description: "Angular UI Hosted by Nginx"
+    ports:
+      - "4200:80"
   api-reactive:
     build: ./api.reactive
     image: kjtully/angular-springboot-login-api-reactive:20.10
