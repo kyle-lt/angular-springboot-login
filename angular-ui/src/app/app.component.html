@@ -51,6 +51,15 @@
       <app-auto-register></app-auto-register>
       <app-auto-login></app-auto-login>
     </div>
+    <div>
+      <p>
+        Username: {{ username }}
+        <input type="hidden" id="hiddenUsername" value="{{ username }}">
+      </p>
+      <p>
+        Token: {{ token }}
+      </p>
+    </div>
     <router-outlet></router-outlet>
     
     <!-- Anchor and Fragment Tests Begin -->
@@ -75,3 +84,7 @@
     <!-- Anchor and Fragment Tests End -->
   </div>
 </div>
+
+<script type="text/javascript">
+  console.log("This log in app-component never runs...");
+</script>

@@ -21,15 +21,77 @@
           config.beaconUrlHttp = 'http://col.eum-appdynamics.com';
           config.beaconUrlHttps = 'https://col.eum-appdynamics.com';
           config.xd = {enable : false};
-        config.isZonePromise = true;
+          config.isZonePromise = true;
             config.spa = {
                 "spa2": true
             };
-      })(window['adrum-config'] || (window['adrum-config'] = {}));
+      })(window['adrum-config'] || (window['adrum-config'] = {
+        xhr: {
+          payloadParams: [{method: 'POST'}, {method: 'GET'}]
+        },
+        userEventInfo: {
+          "Ajax" : function(context) {
+            // Enable text search on the Ajax payload - not used yet
+            var payload = new URLSearchParams(context.data);
+            urlParams = new URLSearchParams(context.url);
+            return {
+              userData: {
+                ajaxPayload: context.data,
+                ajaxMethod: context.method,
+                ajaxCorrelationIdParam: urlParams.get('correlationIdParam'),
+                ajaxSessionIdParam: urlParams.get('sessionIdParam')
+              }
+            }
+          },
+          "VPageView": function(context) {
+            return {
+              userData: {
+                sessionId: window.sessionStorage.getItem('sessionId')
+              }
+            }
+          },
+          "PageView": function(context) {
+            return {
+              userData: {
+                sessionId: window.sessionStorage.getItem('sessionId')
+              }              
+            }
+          }
+        }
+      }));
       </script>
       <script src='//cdn.appdynamics.com/adrum/adrum-latest.js'></script>
   </head>
   <body>
     <app-root></app-root>
+      <!--
+      <script type="text/javascript">
+        //my.namespace.publicFunc();
+        var myPageVar;
+        console.log("myPageVar = " + myPageVar);
+      </script>
+      -->
   </body>
+  <!--
+  <script type="text/javascript">
+    var authUserJson = JSON.parse(window.sessionStorage.getItem('auth-user'));
+    console.log(authUserJson);
+    var id = authUserJson.id;
+    var username = authUserJson.username;
+    var email = authUserJson.email;
+    var token = authUserJson.accessToken;
+    console.log("id = " + id);
+    console.log("usename = " + username);
+    console.log("email = " + email);
+    console.log("token = " + token);
+    var authBearerToken = "Bearer " + token;
+    console.log("Authorization (Bearer) Token = " + authBearerToken);
+    //var value = document.getElementById(hiddenUsername).value;
+    //console.log(value);
+    //my.namespace.publicFunc();
+    //console.log("I got the username "+$("#hiddenUsername").val());
+    //console.log("Why is this not showing up?");
+    //console.log(angular.element(document.querySelector('[id="hiddenUsername"]')).scope().username);
+  </script>
+  -->
 </html>
