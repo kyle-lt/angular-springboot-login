@@ -4,7 +4,7 @@
     </header>
 </div>
 <div class="links">
-  <h2>Home Fragment Options</h2>
+  <h2>Home Fragments</h2>
   <ul>
     <li *ngFor="let link of modes">
       <a [routerLink]='"."' [fragment]="link" (click)="doStuff(link)">{{link}}</a>

@@ -19,6 +19,7 @@ export class AppComponent implements OnInit, OnDestroy {
   showModeratorBoard = false;
   username: string = "";
   token: string = "";
+  sessionId: string = "";
   //modes: Array<String> = ['public', 'admin', 'mod']
 
   constructor(private tokenStorageService: TokenStorageService, private userService: UserService, private authService: AuthService, private ngZone: NgZone) {}
@@ -34,6 +35,8 @@ export class AppComponent implements OnInit, OnDestroy {
       console.log("New Session!  sessionId = " + uuid);
       this.tokenStorageService.saveSession(uuid);
     }
+    // Assign Session ID to member variable
+    this.sessionId = this.tokenStorageService.getSession();
 
 
     // For other AppD Custom Data Test

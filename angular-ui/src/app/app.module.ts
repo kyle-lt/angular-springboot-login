@@ -17,6 +17,7 @@ import { BoardUserComponent } from './board-user/board-user.component';
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
 import { AutoLoginComponent } from './auto-login/auto-login.component';
 import { AutoRegisterComponent } from './auto-register/auto-register.component';
+import { LoginSimComponent } from './login-sim/login-sim.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { AutoRegisterComponent } from './auto-register/auto-register.component';
     BoardModeratorComponent,
     BoardUserComponent,
     AutoLoginComponent,
-    AutoRegisterComponent
+    AutoRegisterComponent,
+    LoginSimComponent
   ],
   imports: [
     BrowserModule,

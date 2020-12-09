@@ -46,18 +46,32 @@
     </ul>
   </nav>
 
+  <app-login-sim></app-login-sim>
+  
   <div class="container">
     <div *ngIf="!isLoggedIn">
       <app-auto-register></app-auto-register>
       <app-auto-login></app-auto-login>
     </div>
     <div>
+      <h4>
+        SessionId
+      </h4>
       <p>
-        Username: {{ username }}
-        <input type="hidden" id="hiddenUsername" value="{{ username }}">
+        {{ sessionId }}
       </p>
+      <h4>
+        Username
+      </h4>
       <p>
-        Token: {{ token }}
+        {{ username }}
+        <!--<input type="hidden" id="hiddenUsername" value="{{ username }}">-->
+      </p>
+      <h4>
+        Token
+      </h4>
+      <p>
+        {{ token }}
       </p>
     </div>
     <router-outlet></router-outlet>
