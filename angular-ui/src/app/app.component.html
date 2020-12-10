@@ -7,21 +7,48 @@
       </li>
       <!-- removed from li element: *ngIf="showAdminBoard" -->
       <li class="nav-item">
-        <a href="/admin" class="nav-link" [ngStyle]="{'color': showAdminBoard? 'chartreuse' : 'pink'}" routerLink="admin">Admin Board</a>
+        <a
+          href="/admin"
+          class="nav-link"
+          [ngStyle]="{ color: showAdminBoard ? 'chartreuse' : 'pink' }"
+          routerLink="admin"
+          >Admin Board</a
+        >
       </li>
       <!-- removed from li element: *ngIf="showModeratorBoard" -->
       <li class="nav-item">
-        <a href="/mod" class="nav-link" [ngStyle]="{'color': showModeratorBoard? 'chartreuse' : 'pink'}" routerLink="mod">Moderator Board</a>
+        <a
+          href="/mod"
+          class="nav-link"
+          [ngStyle]="{ color: showModeratorBoard ? 'chartreuse' : 'pink' }"
+          routerLink="mod"
+          >Moderator Board</a
+        >
       </li>
       <!-- removed from a element: *ngIf="isLoggedIn" -->
       <li class="nav-item">
-        <a href="/user" class="nav-link" [ngStyle]="{'color': isLoggedIn? 'chartreuse' : 'pink'}" routerLink="user">User</a>
+        <a
+          href="/user"
+          class="nav-link"
+          [ngStyle]="{ color: isLoggedIn ? 'chartreuse' : 'pink' }"
+          routerLink="user"
+          >User</a
+        >
       </li>
       <li class="nav-item">
         <a class="nav-link" (click)="getTestPublicContent()">/api/test/all</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" (click)="getAuthPublicContent()">/api/auth/all</a>
+      </li>
+      <li class="nav-item">
+        <a
+          href="/login-sim"
+          class="nav-link"
+          [ngStyle]="{ color: 'DeepSkyBlue' }"
+          routerLink="login-sim"
+          >Login-Sim</a
+        >
       </li>
     </ul>
 
@@ -46,36 +73,50 @@
     </ul>
   </nav>
 
-  <app-login-sim></app-login-sim>
-  
+  <!--<app-login-sim></app-login-sim>-->
+
   <div class="container">
     <div *ngIf="!isLoggedIn">
       <app-auto-register></app-auto-register>
       <app-auto-login></app-auto-login>
     </div>
     <div>
-      <h4>
-        SessionId
-      </h4>
-      <p>
-        {{ sessionId }}
-      </p>
-      <h4>
-        Username
-      </h4>
-      <p>
-        {{ username }}
-        <!--<input type="hidden" id="hiddenUsername" value="{{ username }}">-->
-      </p>
-      <h4>
-        Token
-      </h4>
-      <p>
-        {{ token }}
-      </p>
+      <div class="container">
+        <p></p>
+        <table class="table table-bordered table-dark">
+          <thead>
+          <tr>
+            <th>SessionId</th>
+            <th>Username</th>
+            <th>JWT Auth Token</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ sessionId }}</td>
+            <td>{{ username }}</td>
+            <td style="word-wrap: break-word;min-width: 500px;max-width: 500px;">{{ token }}</td>
+          </tr>
+        </tbody>
+        </table>
+        <!--
+        <h4>SessionId</h4>
+        <p>
+          {{ sessionId }}
+        </p>
+        <h4>Username</h4>
+        <p>
+          {{ username }}-->
+          <!--<input type="hidden" id="hiddenUsername" value="{{ username }}">-->
+        <!--</p>
+        <h4>Token</h4>
+        <p>
+          {{ token }}
+        </p>-->
+      </div>
     </div>
     <router-outlet></router-outlet>
-    
+
     <!-- Anchor and Fragment Tests Begin -->
     <!-- Moved to home.component.html
     <div class="links">

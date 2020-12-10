@@ -17,7 +17,7 @@ export class AppComponent implements OnInit, OnDestroy {
   isLoggedIn = false;
   showAdminBoard = false;
   showModeratorBoard = false;
-  username: string = "";
+  username: string = "No Username Yet, Login!";
   token: string = "";
   sessionId: string = "";
   //modes: Array<String> = ['public', 'admin', 'mod']
@@ -38,7 +38,6 @@ export class AppComponent implements OnInit, OnDestroy {
     // Assign Session ID to member variable
     this.sessionId = this.tokenStorageService.getSession();
 
-
     // For other AppD Custom Data Test
     //(<any>window).myPageVar = "Angular provided this value!";
     (<any>window)['myPageVar'] = "Angular provided this value!";
@@ -50,6 +49,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.isLoggedIn = !!this.tokenStorageService.getToken();
     this.token = this.tokenStorageService.getToken();
+    if ( this.token == null ) {
+      this.token = "No Token Yet, Login!";
+    }
 
     if (this.isLoggedIn) {
       const user = this.tokenStorageService.getUser();
